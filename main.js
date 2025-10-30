@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM loaded, initializing app...");
     initializeCalendar();
     createMealForm();
+    initializeProgressTracker();
     loadMealsData();
 });
 
@@ -135,6 +136,8 @@ function refreshMealDisplay() {
     displayMeals();
     displayTotals();
     updateMealFormDate();
+    // Also refresh progress tracker daily summary for the new date
+    displayDailySummary();
 }
 
 // Update meal form date to match selected date
@@ -149,6 +152,230 @@ function updateMealFormDate() {
         const localDateTime = selectedDateTime.toISOString().slice(0, 16);
         mealDateInput.value = localDateTime;
     }
+}
+
+// Initialize progress tracker functionality
+function initializeProgressTracker() {
+    console.log("Initializing progress tracker...");
+    
+    // Get DOM elements
+    const updateProgressBtn = document.getElementById('updateProgressBtn');
+    const updateMacrosBtn = document.getElementById('updateMacrosBtn');
+    
+    // Connect form buttons to progressTracker functions
+    if (updateProgressBtn) {
+        updateProgressBtn.addEventListener('click', handleUpdateProgress);
+    }
+    
+    if (updateMacrosBtn) {
+        updateMacrosBtn.addEventListener('click', handleUpdateMacros);
+    }
+    
+    // Load existing progress data into forms
+    loadProgressData();
+    
+    // Display current progress
+    displayProgress();
+    displayDailySummary();
+}
+
+// Handle weight and height update
+function handleUpdateProgress() {
+    const currentWeight = document.getElementById('currentWeight').value;
+    const targetWeight = document.getElementById('targetWeight').value;
+    const heightFeet = document.getElementById('heightFeet').value;
+    const heightInches = document.getElementById('heightInches').value;
+    
+    if (!currentWeight && !targetWeight && !heightFeet && !heightInches) {
+        showMessage("Please enter at least one value to update", "error");
+        return;
+    }
+    
+    // Call progressTracker function
+    if (typeof updateWeightAndHeight === 'function') {
+        updateWeightAndHeight({
+            currentWeight: currentWeight || undefined,
+            targetWeight: targetWeight || undefined,
+            heightFeet: heightFeet || undefined,
+            heightInches: heightInches || undefined
+        });
+        
+        // Refresh displays
+        displayProgress();
+        displayDailySummary();
+        showMessage("✅ Weight and height updated successfully!", "success");
+    }
+}
+
+// Handle macro targets update
+function handleUpdateMacros() {
+    const targetCals = document.getElementById('targetCals').value;
+    const targetCarbs = document.getElementById('targetCarbs').value;
+    const targetFat = document.getElementById('targetFat').value;
+    const targetProtein = document.getElementById('targetProtein').value;
+    
+    if (!targetCals && !targetCarbs && !targetFat && !targetProtein) {
+        showMessage("Please enter at least one macro target to update", "error");
+        return;
+    }
+    
+    // Call progressTracker function
+    if (typeof updateTargetMacros === 'function') {
+        updateTargetMacros({
+            targetCals: targetCals || undefined,
+            targetCarbs: targetCarbs || undefined,
+            targetFat: targetFat || undefined,
+            targetProtein: targetProtein || undefined
+        });
+        
+        // Refresh displays
+        displayProgress();
+        displayDailySummary();
+        displayTotals(); // Also refresh meal totals to show targets
+        showMessage("✅ Macro targets updated successfully!", "success");
+    }
+}
+
+// Load existing progress data into form fields
+function loadProgressData() {
+    const progress = typeof getProgress === 'function' ? getProgress() : null;
+    
+    if (progress) {
+        const currentWeightField = document.getElementById('currentWeight');
+        const targetWeightField = document.getElementById('targetWeight');
+        const heightFeetField = document.getElementById('heightFeet');
+        const heightInchesField = document.getElementById('heightInches');
+        const targetCalsField = document.getElementById('targetCals');
+        const targetCarbsField = document.getElementById('targetCarbs');
+        const targetFatField = document.getElementById('targetFat');
+        const targetProteinField = document.getElementById('targetProtein');
+        
+        if (progress.currentWeight && currentWeightField) {
+            currentWeightField.value = progress.currentWeight;
+        }
+        if (progress.targetWeight && targetWeightField) {
+            targetWeightField.value = progress.targetWeight;
+        }
+        if (progress.height && heightFeetField && heightInchesField) {
+            // Convert meters back to feet and inches for display
+            const totalInches = progress.height / 0.0254;
+            const feet = Math.floor(totalInches / 12);
+            const inches = Math.round(totalInches % 12);
+            heightFeetField.value = feet;
+            heightInchesField.value = inches;
+        }
+        if (progress.targetCals && targetCalsField) {
+            targetCalsField.value = progress.targetCals;
+        }
+        if (progress.targetCarbs && targetCarbsField) {
+            targetCarbsField.value = progress.targetCarbs;
+        }
+        if (progress.targetFat && targetFatField) {
+            targetFatField.value = progress.targetFat;
+        }
+        if (progress.targetProtein && targetProteinField) {
+            targetProteinField.value = progress.targetProtein;
+        }
+    }
+}
+
+// Display progress information
+function displayProgress() {
+    const progressDisplay = document.getElementById('progressDisplay');
+    const progress = typeof getProgress === 'function' ? getProgress() : null;
+    
+    if (!progress || !progressDisplay) {
+        if (progressDisplay) {
+            progressDisplay.innerHTML = '<p class="text-gray-500">Set your weight and height to see progress metrics</p>';
+        }
+        return;
+    }
+    
+    const weightDiffText = progress.weightDiff > 0 
+        ? `${progress.weightDiff.toFixed(1)} lbs to go`
+        : progress.weightDiff < 0 
+        ? `${Math.abs(progress.weightDiff).toFixed(1)} lbs over target`
+        : 'At target weight!';
+    
+    const weightDiffClass = progress.weightDiff > 0 
+        ? 'positive' 
+        : progress.weightDiff < 0 
+        ? 'negative' 
+        : '';
+    
+    progressDisplay.innerHTML = `
+        <div class="progress-display">
+            <div class="progress-card">
+                <h4>Current Weight</h4>
+                <div class="progress-value">${progress.currentWeight} lbs</div>
+            </div>
+            <div class="progress-card">
+                <h4>Target Weight</h4>
+                <div class="progress-value">${progress.targetWeight} lbs</div>
+            </div>
+            <div class="progress-card">
+                <h4>BMI</h4>
+                <div class="progress-value">${progress.bmi}</div>
+            </div>
+            <div class="progress-card">
+                <h4>Progress</h4>
+                <div class="progress-value ${weightDiffClass}">${weightDiffText}</div>
+            </div>
+        </div>
+    `;
+}
+
+// Display daily summary with macro progress
+function displayDailySummary() {
+    const dailySummaryDisplay = document.getElementById('dailySummaryDisplay');
+    const summary = typeof getDailySummary === 'function' ? getDailySummary(selectedDate) : null;
+    
+    if (!summary || !dailySummaryDisplay) {
+        if (dailySummaryDisplay) {
+            dailySummaryDisplay.innerHTML = '<p class="text-gray-500">Set your macro targets to see daily progress</p>';
+        }
+        return;
+    }
+    
+    const { totals, remaining } = summary;
+    
+    // Calculate percentages for progress bars
+    const caloriesPercent = Math.min((totals.calories / (totals.calories + Math.max(0, remaining.calories))) * 100, 100);
+    const carbsPercent = Math.min((totals.carbs / (totals.carbs + Math.max(0, remaining.carbs))) * 100, 100);
+    const fatPercent = Math.min((totals.fat / (totals.fat + Math.max(0, remaining.fat))) * 100, 100);
+    const proteinPercent = Math.min((totals.protein / (totals.protein + Math.max(0, remaining.protein))) * 100, 100);
+    
+    dailySummaryDisplay.innerHTML = `
+        <h3 class="text-lg font-semibold mb-3">📊 Daily Macro Progress</h3>
+        <div class="macro-progress">
+            ${createMacroCard('Calories', totals.calories, remaining.calories, caloriesPercent, '')}
+            ${createMacroCard('Carbs', totals.carbs, remaining.carbs, carbsPercent, 'g')}
+            ${createMacroCard('Fat', totals.fat, remaining.fat, fatPercent, 'g')}
+            ${createMacroCard('Protein', totals.protein, remaining.protein, proteinPercent, 'g')}
+        </div>
+    `;
+}
+
+// Helper function to create macro progress cards
+function createMacroCard(name, consumed, remaining, percent, unit) {
+    const isOver = remaining < 0;
+    const displayRemaining = isOver ? Math.abs(remaining) : remaining;
+    const remainingText = isOver ? `${displayRemaining.toFixed(1)}${unit} over` : `${displayRemaining.toFixed(1)}${unit} left`;
+    const remainingClass = isOver ? 'remaining over' : 'remaining';
+    const barClass = isOver ? 'macro-bar-fill over' : 'macro-bar-fill';
+    
+    return `
+        <div class="macro-card">
+            <h5>${name}</h5>
+            <div class="macro-values">
+                <span class="consumed">${consumed.toFixed(1)}${unit}</span>
+                <span class="${remainingClass}">${remainingText}</span>
+            </div>
+            <div class="macro-bar">
+                <div class="${barClass}" style="width: ${percent}%"></div>
+            </div>
+        </div>
+    `;
 }
 
 // Create the meal input form
@@ -421,9 +648,11 @@ function formatDate(dateString) {
 
 function showMessage(message, type = 'info') {
     const messageDiv = document.createElement('div');
-    messageDiv.className = `fixed top-4 right-4 p-4 rounded shadow-lg z-50 ${
-        type === 'success' ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'
-    }`;
+    let bgColor = 'bg-blue-500';
+    if (type === 'success') bgColor = 'bg-green-500';
+    if (type === 'error') bgColor = 'bg-red-500';
+    
+    messageDiv.className = `fixed top-4 right-4 p-4 rounded shadow-lg z-50 ${bgColor} text-white`;
     messageDiv.textContent = message;
     
     document.body.appendChild(messageDiv);
@@ -445,21 +674,6 @@ window.clearStorageData = clearStorageData;
 
 console.log("✅ Calorie Counter App Ready!");
 console.log("💡 If you see data loading errors, run clearStorageData() in console");
-
-// Example: Adding a meal (from your meal.js)
-document.getElementById('addMealBtn').addEventListener('click', function() {
-    const name = document.getElementById('mealName').value;
-    const calories = Number(document.getElementById('mealCalories').value);
-    const carbs = Number(document.getElementById('mealCarbs').value);
-    const fat = Number(document.getElementById('mealFat').value);
-    const protein = Number(document.getElementById('mealProtein').value);
-
-    const meal = createMeal(name, calories, carbs, fat, protein);
-    addMeal(meal);
-
-    alert('Meal added!');
-    renderMeals(); // Your function to update the UI with meals
-});
 
 // ----------------------
 // Progress Tracker Integration

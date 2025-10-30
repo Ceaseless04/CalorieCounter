@@ -72,15 +72,18 @@ var getProgress = function() {
 // ----------------------
 // Get Daily Summary (Macros)
 // ----------------------
-var getDailySummary = function() {
+var getDailySummary = function(selectedDate) {
     const localData = localStorage.getItem('mealsData');
     const data = localData ? JSON.parse(localData) : { meals: [], progress: {} };
     const p = data.progress;
 
     if (!p || !p.targetCals) return null;
 
-    const today = new Date().toISOString().slice(0, 10);
-    const todayMeals = data.meals.filter(f => f.date && f.date.startsWith(today));
+    // Use selected date if provided, otherwise use today
+    const targetDate = selectedDate 
+        ? (selectedDate instanceof Date ? selectedDate.toISOString().slice(0, 10) : selectedDate.slice(0, 10))
+        : new Date().toISOString().slice(0, 10);
+    const todayMeals = data.meals.filter(f => f.date && f.date.startsWith(targetDate));
 
     if (todayMeals.length === 0) {
         return { totals: { calories: 0, carbs: 0, fat: 0, protein: 0 }, remaining: { 
