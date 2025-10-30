@@ -1,0 +1,24 @@
+{
+  "name": "codejam4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikedami/CalorieCounter.git"
+  },
+  "author": "Mike Damiano, Jordan Yu, Madalina Bulat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikedami/CalorieCounter/issues"
+  },
+  "homepage": "https://github.com/mikedami/CalorieCounter#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "lodash": "^4.17.21",
+    "tailwind": "^4.0.0"
+  }
+}

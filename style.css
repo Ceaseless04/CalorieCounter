@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles for a clean UI */
+body {
+    @apply bg-gray-50 text-gray-900 font-sans;
+}
+
+.container {
+    @apply max-w-3xl mx-auto px-4 py-8;
+}
+
+.card {
+    @apply bg-white rounded-lg shadow p-6 mb-6;
+}
+
+.button {
+    @apply bg-blue-600 text-white font-medium px-4 py-2 rounded hover:bg-blue-700 transition;
+}
+
+.input {
+    @apply border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
