@@ -445,3 +445,96 @@ window.clearStorageData = clearStorageData;
 
 console.log("✅ Calorie Counter App Ready!");
 console.log("💡 If you see data loading errors, run clearStorageData() in console");
+
+// Example: Adding a meal (from your meal.js)
+document.getElementById('addMealBtn').addEventListener('click', function() {
+    const name = document.getElementById('mealName').value;
+    const calories = Number(document.getElementById('mealCalories').value);
+    const carbs = Number(document.getElementById('mealCarbs').value);
+    const fat = Number(document.getElementById('mealFat').value);
+    const protein = Number(document.getElementById('mealProtein').value);
+
+    const meal = createMeal(name, calories, carbs, fat, protein);
+    addMeal(meal);
+
+    alert('Meal added!');
+    renderMeals(); // Your function to update the UI with meals
+});
+
+// ----------------------
+// Progress Tracker Integration
+// ----------------------
+
+// Elements
+const updateProgressBtn = document.getElementById('updateProgressBtn');
+const updateMacrosBtn = document.getElementById('updateMacrosBtn');
+const progressDisplay = document.getElementById('progressDisplay');
+const dailySummaryDisplay = document.getElementById('dailySummaryDisplay');
+
+// Update weight and height
+updateProgressBtn.addEventListener('click', () => {
+    const currentWeight = Number(document.getElementById('currentWeight').value);
+    const targetWeight = Number(document.getElementById('targetWeight').value);
+    const heightFeet = Number(document.getElementById('heightFeet').value);
+    const heightInches = Number(document.getElementById('heightInches').value);
+
+    updateWeightAndHeight({ currentWeight, targetWeight, heightFeet, heightInches });
+    renderProgress();
+});
+
+// Update daily macro targets
+updateMacrosBtn.addEventListener('click', () => {
+    const targetCals = Number(document.getElementById('targetCals').value);
+    const targetCarbs = Number(document.getElementById('targetCarbs').value);
+    const targetFat = Number(document.getElementById('targetFat').value);
+    const targetProtein = Number(document.getElementById('targetProtein').value);
+
+    updateTargetMacros({ targetCals, targetCarbs, targetFat, targetProtein });
+    renderDailySummary();
+});
+
+// Render progress (BMI, weight difference, etc.)
+function renderProgress() {
+    const progress = getProgress();
+    if (!progress) {
+        progressDisplay.innerHTML = 'No progress data available.';
+        return;
+    }
+
+    progressDisplay.innerHTML = `
+        <p>Current Weight: ${progress.currentWeight} lbs</p>
+        <p>Target Weight: ${progress.targetWeight} lbs</p>
+        <p>Height: ${progress.height.toFixed(2)} m</p>
+        <p>BMI: ${progress.bmi}</p>
+        <p>Weight Remaining to Goal: ${progress.weightDiff} lbs</p>
+    `;
+}
+
+// Render daily macro summary
+function renderDailySummary() {
+    const summary = getDailySummary();
+    if (!summary || !summary.totals) {
+        dailySummaryDisplay.innerHTML = 'No meals logged today.';
+        return;
+    }
+
+    const { totals, remaining } = summary;
+    dailySummaryDisplay.innerHTML = `
+        <p><strong>Consumed Today:</strong></p>
+        <p>Calories: ${totals.calories}</p>
+        <p>Carbs: ${totals.carbs} g</p>
+        <p>Fat: ${totals.fat} g</p>
+        <p>Protein: ${totals.protein} g</p>
+        <p><strong>Remaining:</strong></p>
+        <p>Calories: ${remaining.calories}</p>
+        <p>Carbs: ${remaining.carbs} g</p>
+        <p>Fat: ${remaining.fat} g</p>
+        <p>Protein: ${remaining.protein} g</p>
+    `;
+}
+
+// Initial render on page load
+document.addEventListener('DOMContentLoaded', () => {
+    renderProgress();
+    renderDailySummary();
+});

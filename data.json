@@ -24,5 +24,15 @@
       "protein": 8,
       "date": "2025-10-29 09:00"
     }
-  ]
-}   
+  ],
+  "progress": {
+    "currentWeight": 85,
+    "targetWeight": 78,
+    "targetCals": 2200,
+    "targetCarbs": 200,
+    "targetFat": 70,
+    "targetProtein": 180
+  }
+}
+
+ 
