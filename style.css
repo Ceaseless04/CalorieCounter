@@ -1,24 +1,562 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Modern CSS for Calorie Counter */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-/* Custom base styles for a clean UI */
 body {
-    @apply bg-gray-50 text-gray-900 font-sans;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f9fafb;
+    color: #111827;
+    line-height: 1.6;
 }
 
 .container {
-    @apply max-w-3xl mx-auto px-4 py-8;
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
 }
 
 .card {
-    @apply bg-white rounded-lg shadow p-6 mb-6;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .button {
-    @apply bg-blue-600 text-white font-medium px-4 py-2 rounded hover:bg-blue-700 transition;
+    background: #2563eb;
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.input {
-    @apply border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500;
+.button:hover {
+    background: #1d4ed8;
+}
+
+/* Form Styles */
+.space-y-4 > * + * {
+    margin-top: 1rem;
+}
+
+.grid {
+    display: grid;
+}
+
+.grid-cols-1 {
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .md\:grid-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Input Styles */
+input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.875rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+}
+
+/* Meal Item Styles */
+.meal-item {
+    background: #f9fafb;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border-left: 4px solid #2563eb;
+}
+
+/* Typography */
+.text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+/* Colors */
+.text-gray-500 {
+    color: #6b7280;
+}
+
+.text-gray-600 {
+    color: #4b5563;
+}
+
+.text-orange-600 {
+    color: #ea580c;
+}
+
+.text-green-600 {
+    color: #16a34a;
+}
+
+.text-red-600 {
+    color: #dc2626;
+}
+
+.text-blue-600 {
+    color: #2563eb;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+.bg-gray-50 {
+    background-color: #f9fafb;
+}
+
+/* Spacing */
+.mb-1 {
+    margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+    margin-bottom: 0.75rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+
+.mb-8 {
+    margin-bottom: 2rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.mt-6 {
+    margin-top: 1.5rem;
+}
+
+.p-2 {
+    padding: 0.5rem;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+/* Layout */
+.flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.items-start {
+    align-items: flex-start;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Fixed positioning for messages */
+.fixed {
+    position: fixed;
+}
+
+.top-4 {
+    top: 1rem;
+}
+
+.right-4 {
+    right: 1rem;
+}
+
+.rounded {
+    border-radius: 6px;
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.z-50 {
+    z-index: 50;
+}
+
+.bg-green-500 {
+    background-color: #10b981;
+}
+
+.bg-blue-500 {
+    background-color: #3b82f6;
+}
+
+.text-white {
+    color: white;
+}
+
+/* Calendar Styles */
+.calendar-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.date-navigation {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-button {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 1.2rem;
+}
+
+.nav-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.nav-button:active {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.current-date-display {
+    font-size: 1.25rem;
+    font-weight: 600;
+    min-width: 180px;
+    text-align: center;
+}
+
+.date-picker-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.date-picker {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.date-picker:focus {
+    outline: none;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.quick-nav {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.quick-nav-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.quick-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.quick-nav-btn.active {
+    background: rgba(255, 255, 255, 0.4);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .calendar-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .date-navigation {
+        justify-content: center;
+    }
+    
+    .quick-nav {
+        justify-content: center;
+    }
+}
+
+/* Progress Tracker Styles */
+.progress-inputs {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+.progress-inputs h3 {
+    color: #374151;
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.progress-inputs label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+.progress-inputs input {
+    width: 100%;
+    margin-top: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.progress-inputs input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.progress-inputs button {
+    background: #059669;
+    color: white;
+    font-weight: 500;
+    padding: 0.625rem 1.25rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 0.5rem;
+}
+
+.progress-inputs button:hover {
+    background: #047857;
+}
+
+.progress-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.progress-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progress-card h4 {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.progress-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #374151;
+}
+
+.progress-value.positive {
+    color: #059669;
+}
+
+.progress-value.negative {
+    color: #dc2626;
+}
+
+.daily-summary-display {
+    margin-top: 1rem;
+}
+
+.macro-progress {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.macro-card {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.macro-card h5 {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.macro-values {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.consumed {
+    color: #374151;
+    font-weight: 600;
+}
+
+.remaining {
+    color: #6b7280;
+}
+
+.remaining.over {
+    color: #dc2626;
+}
+
+.macro-bar {
+    width: 100%;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    margin: 0.5rem 0;
+    overflow: hidden;
+}
+
+.macro-bar-fill {
+    height: 100%;
+    background: #059669;
+    transition: width 0.3s ease;
+}
+
+.macro-bar-fill.over {
+    background: #dc2626;
 }

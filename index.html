@@ -1,16 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sharkwords</title>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calorie Counter - Meal Logger</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-  <body>
-    <div id="app"></div>
-    <div>Hello World</div>
-    <script type="module" src="/main.js"></script>
-  </body>
+<body>
+  <div class="container">
+    <h1 class="text-3xl font-bold mb-8">🍽️ Calorie Counter</h1>
 
+    <div class="calendar-section">
+      <div class="calendar-controls">
+        <div class="date-navigation">
+          <button class="nav-button" id="prev-day" title="Previous Day">‹</button>
+          <div class="current-date-display" id="current-date-display">Today</div>
+          <button class="nav-button" id="next-day" title="Next Day">›</button>
+        </div>
+
+        <div class="date-picker-container">
+          <input type="date" id="date-picker" class="date-picker" title="Select specific date">
+          <div class="quick-nav">
+            <button class="quick-nav-btn active" id="today-btn">Today</button>
+            <button class="quick-nav-btn" id="yesterday-btn">Yesterday</button>
+            <button class="quick-nav-btn" id="week-ago-btn">Week Ago</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="app">
+      <div id="meal-form-section" class="card">
+        <h2 class="text-xl font-semibold mb-4">Add New Meal</h2>
+        <div id="meal-form"></div>
+      </div>
+
+      <div id="meals-display-section" class="card">
+        <h2 class="text-xl font-semibold mb-4">Your Meals</h2>
+        <div id="meals-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="progress-tracker-section" class="card">
+    <h2 class="text-xl font-semibold mb-4">Progress Tracker</h2>
+
+    <div class="progress-inputs">
+      <h3 class="text-lg font-medium mb-2">Weight & Height</h3>
+      <label>Current Weight (lbs): <input type="number" id="currentWeight" placeholder="e.g. 180"></label>
+      <label>Target Weight (lbs): <input type="number" id="targetWeight" placeholder="e.g. 160"></label>
+      <label>Height Feet: <input type="number" id="heightFeet" placeholder="e.g. 5"></label>
+      <label>Height Inches: <input type="number" id="heightInches" placeholder="e.g. 10"></label>
+      <button id="updateProgressBtn">Update Weight & Height</button>
+    </div>
+
+    <div class="progress-inputs">
+      <h3 class="text-lg font-medium mb-2">Daily Macro Targets</h3>
+      <label>Calories: <input type="number" id="targetCals" placeholder="e.g. 2000"></label>
+      <label>Carbs (g): <input type="number" id="targetCarbs" placeholder="e.g. 250"></label>
+      <label>Fat (g): <input type="number" id="targetFat" placeholder="e.g. 70"></label>
+      <label>Protein (g): <input type="number" id="targetProtein" placeholder="e.g. 150"></label>
+      <button id="updateMacrosBtn">Update Macro Targets</button>
+    </div>
+
+    <div id="progressDisplay" class="progress-display mt-4"></div>
+    <div id="dailySummaryDisplay" class="daily-summary-display mt-4"></div>
+  </div>
+
+  <script src="/src/meal.js"></script>
+  <script src="/src/progressTracker.js"></script>
+  <script type="module" src="/main.js"></script>
+</body>
 </html>
