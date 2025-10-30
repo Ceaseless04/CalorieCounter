@@ -1,0 +1,28 @@
+{
+  "meals": [
+    {
+      "name": "Chicken Salad",
+      "calories": 450,
+      "carbs": 15,
+      "fat": 20,
+      "protein": 40,
+      "date": "2025-10-30 12:30"
+    },
+    {
+      "name": "Protein Shake",
+      "calories": 220,
+      "carbs": 10,
+      "fat": 5,
+      "protein": 35,
+      "date": "2025-10-30 15:00"
+    },
+    {
+      "name": "Oatmeal with Banana",
+      "calories": 300,
+      "carbs": 50,
+      "fat": 5,
+      "protein": 8,
+      "date": "2025-10-29 09:00"
+    }
+  ]
+}   
